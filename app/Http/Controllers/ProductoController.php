@@ -8,39 +8,79 @@ use Illuminate\Http\Request;
 
 class ProductoController extends Controller
 {
+
+    public function inicio()
+    {
+        $productos = Producto::take(4)->get();
+        return view('tienda.inicio', compact('productos'));
+    }
+
+    public function tienda()
+    {
+        $productos = \App\Models\Producto::all();
+        return view('tienda.productos', compact('productos'));
+    }
+
+    public function show($id)
+    {
+        $producto = Producto::findOrFail($id);
+        return view('tienda.producto', compact('producto'));
+    }
+
     public function index()
     {
         $productos = Producto::with('categoria')->get();
-        return view('productos.index', compact('productos'));
+        return view('admin.productos.index', compact('productos'));
     }
 
     public function create()
     {
         $categorias = Categoria::all();
-        return view('productos.create', compact('categorias'));
+        return view('admin.productos.create', compact('categorias'));
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'nombre' => 'required',
-            'descripcion' => 'required',
-            'precio' => 'required|numeric',
-            'stock' => 'required|integer',
-            'categoria_id' => 'required|exists:categorias,id'
-        ]);
 
-        Producto::create($request->all());
+    $request->validate([
+    'nombre'=>'required',
+    'descripcion'=>'required',
+    'precio'=>'required',
+    'stock'=>'required',
+    'categoria_id'=>'required',
+    'imagen'=>'image'
+    ]);
 
-        return redirect()->route('productos.index')
-            ->with('success', 'Producto creado correctamente');
+    $imagenNombre = null;
+
+    if($request->hasFile('imagen')){
+
+    $imagen = $request->file('imagen');
+
+    $imagenNombre = time().'.'.$imagen->getClientOriginalExtension();
+
+    $imagen->move(public_path('productos'),$imagenNombre);
+
     }
 
+    Producto::create([
+    'nombre'=>$request->nombre,
+    'descripcion'=>$request->descripcion,
+    'precio'=>$request->precio,
+    'stock'=>$request->stock,
+    'categoria_id'=>$request->categoria_id,
+    'imagen'=>$imagenNombre
+    ]);
+
+    return redirect()->route('productos.index');
+
+    }
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
         $categorias = Categoria::all();
-        return view('productos.edit', compact('producto', 'categorias'));
+
+        return view('admin.productos.edit', compact('producto','categorias'));
     }
 
     public function update(Request $request, $id)
@@ -66,4 +106,5 @@ class ProductoController extends Controller
         return redirect()->route('productos.index')
             ->with('success', 'Producto eliminado');
     }
+
 }

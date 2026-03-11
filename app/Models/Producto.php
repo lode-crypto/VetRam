@@ -18,4 +18,13 @@ class Producto extends Model
 {
     return $this->belongsTo(Carrito::class);
 }
+    protected $fillable = [
+        'nombre',
+        'descripcion',
+        'precio',
+        'stock',
+        'imagen',
+        
+        
+    ];
 }
