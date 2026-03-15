@@ -1,49 +1,64 @@
-<h1>Productos</h1>
+@extends('layouts.app')
 
-<a href="{{ route('productos.create') }}">
-Agregar Producto
-</a>
+@section('contenido')
 
-<table>
+<div class="page">
 
-<tr>
-<th>Nombre</th>
-<th>Precio</th>
-<th>Stock</th>
-<th>Acciones</th>
-</tr>
+    <div class="top-actions">
+        <h1>Lista de Productos</h1>
 
-@foreach($productos as $producto)
+        <a class="create-link" href="{{ route('productos.create') }}">
+            Agregar Producto
+        </a>
+    </div>
 
-<tr>
+    <div class="cards-grid">
 
-<td>{{ $producto->nombre }}</td>
+        @foreach($productos as $producto)
 
-<td>{{ $producto->precio }}</td>
+        <article class="ram-card">
 
-<td>{{ $producto->stock }}</td>
+            <div class="ram-img-wrap">
+                <img class="ram-img"
+                     src="{{ asset('storage/imagenesdeproductos/'.$producto->imagen) }}"
+                     alt="{{ $producto->nombre }}">
+            </div>
 
-<td>
+            <div class="ram-label">RAM</div>
 
-<a href="{{ route('productos.edit',$producto->id) }}">
-Editar
-</a>
+            <div class="ram-name">
+                {{ $producto->nombre }}
+            </div>
 
-<form action="{{ route('productos.destroy',$producto->id) }}" method="POST">
+            <div class="ram-meta">
+                <span>Precio: {{ $producto->precio }} $</span>
+                <span>Stock: {{ $producto->stock }}</span>
+            </div>
 
-@csrf
-@method('DELETE')
+            <div class="ram-actions">
 
-<button>
-Eliminar
-</button>
+                <a class="btn-link btn-edit"
+                   href="{{ route('productos.edit',$producto->id) }}">
+                    Editar
+                </a>
 
-</form>
+                <form action="{{ route('productos.destroy',$producto->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
 
-</td>
+                    <button class="btn-link btn-delete" type="submit">
+                        Eliminar
+                    </button>
+                </form>
 
-</tr>
+            </div>
 
-@endforeach
+        </article>
 
-</table>
+        @endforeach
+
+    </div>
+
+</div>
+
+@endsection

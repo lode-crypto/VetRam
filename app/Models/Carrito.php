@@ -14,4 +14,9 @@ class Carrito extends Model
 {
     return $this->hasMany(Producto::class);
 }
+
+    protected $fillable = [
+        'fechaCreacion',
+        'cliente_id',
+    ];
 }

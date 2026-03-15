@@ -10,4 +10,11 @@ class Administrador extends Model
 {
     return $this->hasMany(Cliente::class);
 }
+
+    protected $fillable = [
+        'nombre',
+        'email',
+        'contrasena',
+        'nivelPermiso',
+    ];
 }

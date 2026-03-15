@@ -10,4 +10,11 @@ class Pago extends Model
 {
     return $this->belongsTo(Pedido::class);
 }
+
+    protected $fillable = [
+        'pedido_id',
+        'monto',
+        'metodoPago',
+        'estadoPago',
+    ];
 }

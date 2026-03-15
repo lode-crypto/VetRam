@@ -29,10 +29,15 @@ class DetallePedidoController extends Controller
             'pedido_id' => 'required|exists:pedidos,id',
             'producto_id' => 'required|exists:productos,id',
             'cantidad' => 'required|integer',
-            'precio' => 'required|numeric'
+            'precioUnitario' => 'required|numeric'
         ]);
 
-        DetallePedido::create($request->all());
+        DetallePedido::create([
+            'pedido_id' => $request->pedido_id,
+            'producto_id' => $request->producto_id,
+            'cantidad' => $request->cantidad,
+            'precioUnitario' => $request->precioUnitario,
+        ]);
 
         return redirect()->route('detalle_pedidos.index')
             ->with('success', 'Detalle del pedido creado');
@@ -51,7 +56,19 @@ class DetallePedidoController extends Controller
     {
         $detalle = DetallePedido::findOrFail($id);
 
-        $detalle->update($request->all());
+        $request->validate([
+            'pedido_id' => 'required|exists:pedidos,id',
+            'producto_id' => 'required|exists:productos,id',
+            'cantidad' => 'required|integer',
+            'precioUnitario' => 'required|numeric'
+        ]);
+
+        $detalle->update([
+            'pedido_id' => $request->pedido_id,
+            'producto_id' => $request->producto_id,
+            'cantidad' => $request->cantidad,
+            'precioUnitario' => $request->precioUnitario,
+        ]);
 
         return redirect()->route('detalle_pedidos.index')
             ->with('success', 'Detalle actualizado');

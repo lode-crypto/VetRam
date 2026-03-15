@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use App\Models\Categoria;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProductoController extends Controller
 {
@@ -43,12 +44,12 @@ class ProductoController extends Controller
     {
 
     $request->validate([
-    'nombre'=>'required',
-    'descripcion'=>'required',
-    'precio'=>'required',
-    'stock'=>'required',
-    'categoria_id'=>'required',
-    'imagen'=>'image'
+        'nombre' => 'required',
+        'descripcion' => 'required',
+        'precio' => 'required|numeric',
+        'stock' => 'required|integer',
+        'categoria_id' => 'required|exists:categorias,id',
+        'imagen' => 'nullable|image'
     ]);
 
     $imagenNombre = null;
@@ -59,9 +60,10 @@ class ProductoController extends Controller
 
     $imagenNombre = time().'.'.$imagen->getClientOriginalExtension();
 
-    $imagen->move(public_path('productos'),$imagenNombre);
+    $imagen->storeAs('imagenesdeproductos', $imagenNombre, 'public');
 
     }
+
 
     Producto::create([
     'nombre'=>$request->nombre,
@@ -89,11 +91,29 @@ class ProductoController extends Controller
 
         $request->validate([
             'nombre' => 'required',
+            'descripcion' => 'required',
             'precio' => 'required|numeric',
-            'stock' => 'required|integer'
+            'stock' => 'required|integer',
+            'categoria_id' => 'required|exists:categorias,id',
+            'imagen' => 'nullable|image'
         ]);
 
-        $producto->update($request->all());
+        $imagenNombre = $producto->imagen; // Mantener imagen actual si no se sube nueva
+
+        if($request->hasFile('imagen')){
+            $imagen = $request->file('imagen');
+            $imagenNombre = time().'.'.$imagen->getClientOriginalExtension();
+            $imagen->storeAs('imagenesdeproductos', $imagenNombre, 'public');
+        }
+
+        $producto->update([
+            'nombre' => $request->nombre,
+            'descripcion' => $request->descripcion,
+            'precio' => $request->precio,
+            'stock' => $request->stock,
+            'categoria_id' => $request->categoria_id,
+            'imagen' => $imagenNombre
+        ]);
 
         return redirect()->route('productos.index')
             ->with('success', 'Producto actualizado');

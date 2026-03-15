@@ -48,13 +48,25 @@
 
 <nav>
 
-<a href="/">Inicio</a>
+    <a href="/">Inicio</a>
 
-<a href="/productos">Productos</a>
+    <a href="/productos">Productos</a>
 
-<a href="/carrito">Carrito</a>
+    @if(session('user_id'))
+        <a href="/carrito">Carrito</a>
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Cerrar sesión</a>
 
-<a href="/admin/productos">Admin</a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+
+        @if(session('user_role') === 'admin')
+            <a href="/admin/productos">Admin</a>
+        @endif
+    @else
+        <a href="{{ route('login') }}">Ingresar</a>
+        <a href="{{ route('register') }}">Registrarse</a>
+    @endif
 
 </nav>
 

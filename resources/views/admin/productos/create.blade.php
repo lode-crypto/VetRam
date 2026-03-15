@@ -1,40 +1,35 @@
-<h1>Agregar Producto</h1>
+@extends('layouts.app')
 
-<form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
+@section('contenido')
+    <h1>Agregar Producto</h1>
 
-@csrf
+    <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
 
-<label>Nombre</label>
-<input type="text" name="nombre">
+        <label>Nombre</label>
+        <input type="text" name="nombre" required>
 
-<label>Descripcion</label>
-<textarea name="descripcion"></textarea>
+        <label>Descripción</label>
+        <textarea name="descripcion" required></textarea>
 
-<label>Precio</label>
-<input type="number" name="precio">
+        <label>Precio</label>
+        <input type="number" step="0.01" name="precio" required>
 
-<label>Stock</label>
-<input type="number" name="stock">
+        <label>Stock</label>
+        <input type="number" name="stock" required>
 
-<label>Categoria</label>
+        <label>Categoría</label>
+        <select name="categoria_id" required>
+            @foreach($categorias as $categoria)
+                <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+            @endforeach
+        </select>
 
-<select name="categoria_id">
+        <label>Imagen</label>
+        <input type="file" name="imagen" accept="image/*" required>
 
-@foreach($categorias as $categoria)
+        <button type="submit">Guardar Producto</button>
+    </form>
 
-<option value="{{ $categoria->id }}">
-{{ $categoria->nombre }}
-</option>
-
-@endforeach
-
-</select>
-
-<label>Imagen</label>
-<input type="file" name="imagen">
-
-<button type="submit">
-Guardar Producto
-</button>
-
-</form>
+    <p><a href="{{ route('productos.index') }}">Volver a la lista</a></p>
+@endsection

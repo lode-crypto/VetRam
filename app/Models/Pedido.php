@@ -18,4 +18,11 @@ class Pedido extends Model
 {
     return $this->hasOne(Pago::class);
 }
+
+    protected $fillable = [
+        'fecha',
+        'estado',
+        'total',
+        'cliente_id',
+    ];
 }
