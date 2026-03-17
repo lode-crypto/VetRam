@@ -61,7 +61,7 @@
         </form>
 
         @if(session('user_role') === 'admin')
-            <a href="/admin/productos">Admin</a>
+            <a href="/admin/">Admin</a>
         @endif
     @else
         <a href="{{ route('login') }}">Ingresar</a>

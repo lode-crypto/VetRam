@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detalle_pedidos', function (Blueprint $table) {
             $table->id();
             $table->integer('cantidad');
-            $table->decimal('precioUnitario', 10, 2);
+            $table->decimal('precioUnitario', 10, 2)->default(0);
 
             $table->foreignId('pedido_id')
                 ->constrained('pedidos')

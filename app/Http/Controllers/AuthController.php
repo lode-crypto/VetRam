@@ -25,7 +25,7 @@ class AuthController extends Controller
 
         if ($admin && Hash::check($request->password, $admin->contrasena)) {
             session(['user_id' => $admin->id, 'user_role' => 'admin', 'user_name' => $admin->nombre]);
-            return redirect()->intended('/');
+            return redirect('/admin');
         }
 
         $cliente = Cliente::where('email', $request->email)->first();
@@ -57,8 +57,8 @@ class AuthController extends Controller
         if (! $admin) {
             $admin = Administrador::create([
                 'nombre' => 'Admin',
-                'email' => 'admin@example.com',
-                'contrasena' => Hash::make('password'),
+                'email' => 'admin@gmail.com',
+                'contrasena' => Hash::make('admin'),
                 'nivelPermiso' => 'super',
             ]);
         }
