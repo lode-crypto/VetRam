@@ -9,14 +9,12 @@ body {
     color: #e2e8f0;
 }
 
-/* CONTENEDOR */
 .receipt-container {
     max-width: 900px;
     margin: 30px auto;
     padding: 20px;
 }
 
-/* TARJETA */
 .receipt {
     background: #1e293b;
     border-radius: 16px;
@@ -24,20 +22,18 @@ body {
     border: 1px solid #334155;
 }
 
-/* HEADER */
 .success-header {
     text-align: center;
-    border-bottom: 2px solid #22c55e;
+    border-bottom: 2px solid #38bdf8;
     padding-bottom: 15px;
     margin-bottom: 20px;
 }
 
 .success-header h1 {
-    color: #22c55e;
+    color: #38bdf8;
     margin: 0;
 }
 
-/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -45,7 +41,6 @@ body {
     margin-bottom: 25px;
 }
 
-/* BLOQUES */
 .box {
     background: #0f172a;
     padding: 15px;
@@ -57,7 +52,6 @@ body {
     color: #facc15;
 }
 
-/* TABLA */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -75,7 +69,6 @@ body {
     border-top: 1px solid #475569;
 }
 
-/* TOTAL */
 .total {
     text-align: right;
     margin-top: 15px;
@@ -83,10 +76,9 @@ body {
     color: #facc15;
 }
 
-/* PAGO */
 .payment {
     background: #022c22;
-    border-left: 4px solid #22c55e;
+    border-left: 4px solid #38bdf8;
     padding: 15px;
     border-radius: 8px;
     margin-top: 20px;
@@ -99,7 +91,6 @@ body {
     border-radius: 8px;
 }
 
-/* ENVIO */
 .shipping {
     background: #0c4a6e;
     border-left: 4px solid #3b82f6;
@@ -108,7 +99,6 @@ body {
     margin-top: 20px;
 }
 
-/* FOOTER */
 .footer {
     text-align: center;
     margin-top: 20px;
@@ -116,7 +106,6 @@ body {
     color: #94a3b8;
 }
 
-/* BOTON */
 .actions {
     text-align: center;
     margin-top: 20px;
@@ -135,7 +124,6 @@ body {
     background: #eab308;
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .grid {
         grid-template-columns: 1fr;
@@ -144,47 +132,37 @@ body {
 </style>
 
 <div class="receipt-container">
-
     <div class="receipt">
-
-        <!-- HEADER -->
         <div class="success-header">
-            <h1>✓ ¡Pago Realizado con Éxito!</h1>
-            <p>Gracias por tu compra</p>
+            <h1>Pedido #{{ $pedido->id }}</h1>
+            <p>Fecha: {{ $pedido->fecha }} | Estado: {{ ucfirst($pedido->estado) }}</p>
         </div>
 
-        <!-- INFO -->
         <div class="grid">
-
-            <div class="box">
-                <h3>Pedido</h3>
-                <p>#{{ $pedido->id }}</p>
-                <p>{{ $pedido->fecha }}</p>
-                <p><strong>{{ ucfirst($pedido->estado) }}</strong></p>
-            </div>
-
             <div class="box">
                 <h3>Cliente</h3>
                 <p>{{ $pedido->cliente->nombre }}</p>
                 <p>{{ $pedido->cliente->email }}</p>
                 <p>{{ $pedido->cliente->telefono }}</p>
             </div>
-
+            <div class="box">
+                <h3>Pago</h3>
+                <p>Método: {{ $pedido->pago?->metodoPago ?? 'No definido' }}</p>
+                <p>Estado: {{ $pedido->pago?->estadoPago ?? 'Pendiente' }}</p>
+                <p>Monto: {{ number_format($pedido->total, 2) }} Bs</p>
+            </div>
         </div>
 
-        <!-- DETALLE -->
-        <h3 style="color:#facc15;">Detalles</h3>
-
+        <h3 style="color:#facc15;">Detalle del pedido</h3>
         <table class="table">
             <thead>
                 <tr>
                     <th>Producto</th>
-                    <th>Cant.</th>
+                    <th>Cantidad</th>
                     <th>Precio</th>
                     <th>Subtotal</th>
                 </tr>
             </thead>
-
             <tbody>
                 @foreach($pedido->detalles as $detalle)
                 <tr>
@@ -201,40 +179,20 @@ body {
             Total: {{ number_format($pedido->total, 2) }} Bs
         </div>
 
-        <!-- PAGO -->
-        @if($pedido->pago)
-        <div class="payment">
-            <p><strong>Método:</strong> {{ ucfirst($pedido->pago->metodoPago) }}</p>
-            <p><strong>Monto:</strong> {{ number_format($pedido->pago->monto, 2) }} Bs</p>
-            <p><strong>Fecha:</strong> {{ $pedido->pago->created_at->format('d/m/Y H:i') }}</p>
-        </div>
-        @else
-        <div class="warning">
-            ⚠ Pago en proceso
-        </div>
-        @endif
-
-        <!-- ENVIO -->
         <div class="shipping">
-            <strong>Dirección:</strong>
+            <strong>Dirección de envío:</strong>
             <p>{{ $pedido->cliente->direccionEnvio }}</p>
         </div>
 
-        <!-- FOOTER -->
         <div class="footer">
-            <p>Guarda este comprobante</p>
-            <p>contacto@vetram.com</p>
+            <p>Gracias por tu compra.</p>
+            <p>Contacto: contacto@vetram.com</p>
         </div>
-
     </div>
 
-    <!-- BOTON -->
     <div class="actions">
-        <a href="/productos" class="btn">
-            Seguir comprando
-        </a>
+        <a href="/mis-pedidos" class="btn">Volver a Mis Pedidos</a>
     </div>
-
 </div>
 
 @endsection

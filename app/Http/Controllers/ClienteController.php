@@ -24,10 +24,17 @@ class ClienteController extends Controller
             'nombre' => 'required',
             'email' => 'required|email',
             'telefono' => 'required',
-            'direccion' => 'required'
+            'direccionEnvio' => 'required',
+            'contrasena' => 'required|min:6'
         ]);
 
-        Cliente::create($request->all());
+        Cliente::create([
+            'nombre' => $request->nombre,
+            'email' => $request->email,
+            'telefono' => $request->telefono,
+            'direccionEnvio' => $request->direccionEnvio,
+            'contrasena' => bcrypt($request->contrasena)
+        ]);
 
         return redirect()->route('clientes.index')
             ->with('success', 'Cliente creado correctamente');
@@ -47,7 +54,7 @@ class ClienteController extends Controller
             'nombre' => 'required',
             'email' => 'required|email',
             'telefono' => 'required',
-            'direccion' => 'required'
+            'direccionEnvio' => 'required'
         ]);
 
         $cliente->update($request->all());

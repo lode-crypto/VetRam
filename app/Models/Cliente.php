@@ -9,18 +9,40 @@ use Illuminate\Notifications\Notifiable;
 class Cliente extends Authenticatable
 {
     use HasFactory, Notifiable;
+
     public function carrito()
-{
-    return $this->hasOne(Carrito::class);
-}
+    {
+        return $this->hasOne(Carrito::class);
+    }
+
     public function pedidos()
-{
-    return $this->hasMany(Pedido::class);
-}
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
     public function administrador()
-{
-    return $this->belongsTo(Administrador::class);
-}
+    {
+        return $this->belongsTo(Administrador::class);
+    }
+
+    /**
+     * Obtiene o crea el carrito del cliente
+     */
+    public function obtenerCarrito()
+    {
+        return $this->carrito ?? $this->crearCarrito();
+    }
+
+    /**
+     * Crea un carrito para el cliente
+     */
+    public function crearCarrito()
+    {
+        return Carrito::create([
+            'cliente_id' => $this->id,
+            'fechaCreacion' => now()->toDateString(),
+        ]);
+    }
 
     protected $fillable = [
         'nombre',

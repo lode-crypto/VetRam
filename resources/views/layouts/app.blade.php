@@ -3,77 +3,41 @@
 <head>
 
     <title>VetRam</title>
-
-    <style>
-
-    body{
-        font-family: Arial;
-        margin:0;
-        background:#f5f5f5;
-    }
-
-    nav{
-        background:#111;
-        padding:15px;
-    }
-
-    nav a{
-        color:white;
-        margin-right:20px;
-        text-decoration:none;
-        font-weight:bold;
-    }
-
-    .container{
-        width:90%;
-        margin:auto;
-        padding:20px;
-    }
-
-    .producto{
-        background:white;
-        padding:15px;
-        margin:10px;
-        display:inline-block;
-        width:200px;
-        border-radius:5px;
-        box-shadow:0px 0px 5px #ccc;
-    }
-
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
-
 <body>
 
-<nav>
-
-    <a href="/">Inicio</a>
-
-    <a href="/productos">Productos</a>
-
-    @if(session('user_id'))
-        <a href="/carrito">Carrito</a>
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Cerrar sesión</a>
-
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
-
-        @if(session('user_role') === 'admin')
-            <a href="/admin/">Admin</a>
-        @endif
-    @else
-        <a href="{{ route('login') }}">Ingresar</a>
-        <a href="{{ route('register') }}">Registrarse</a>
-    @endif
-
+<nav class="main-nav">
+    <div class="nav-inner container">
+        <a class="brand" href="/">VetRam</a>
+        <div class="nav-links">
+            <a href="/">Inicio</a>
+            <a href="/productos">Productos</a>
+            <a href="/carrito">Carrito</a>
+            @if(session('user_id') && session('user_role') === 'user')
+                <a href="/mis-pedidos">Mis Pedidos</a>
+            @elseif(session('user_id') && session('user_role') === 'admin')
+                <a href="/admin/">Panel Admin</a>
+            @endif
+        </div>
+        <div class="nav-user">
+            @if(session('user_id'))
+                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Cerrar sesión</a>
+            @else
+                <a href="{{ route('login') }}">Ingresar</a>
+                <a href="{{ route('register') }}">Registrarse</a>
+            @endif
+        </div>
+    </div>
 </nav>
 
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
+
 <div class="container">
-
-@yield('contenido')
-
+    @yield('contenido')
 </div>
 
 </body>

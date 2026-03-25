@@ -31,11 +31,14 @@ Route::post('/logout', [AuthController::class,'logout'])->name('logout');
 // Carrito y pedidos
 Route::get('/carrito',[CarritoController::class,'index']);
 Route::post('/carrito/agregar',[CarritoController::class,'agregar']);
-Route::delete('/carrito/eliminar/{id}',[CarritoController::class,'eliminarItem']);
+Route::post('/carrito/actualizar/{productoId}',[CarritoController::class,'actualizar']);
+Route::delete('/carrito/eliminar/{productoId}',[CarritoController::class,'eliminarItem']);
+Route::post('/carrito/vaciar',[CarritoController::class,'vaciar']);
 Route::get('/checkout', [PedidoController::class,'checkout']);
-Route::post('/checkout', [PedidoController::class,'procesarPago']);
-Route::get('/nota-pago/{id}', [PedidoController::class,'notaPago']);
-Route::get('/mis-pedidos',[PedidoController::class,'index']);
+Route::post('/procesarPago', [PedidoController::class,'procesarPago']);
+Route::get('/nota-pago/{id}', [PedidoController::class,'notaPago'])->name('nota-pago');
+Route::get('/mis-pedidos',[PedidoController::class,'index'])->name('mis-pedidos');
+Route::get('/pedido/{id}', [PedidoController::class,'show'])->name('pedido.show');
 
 Route::prefix('admin')->group(function(){
 

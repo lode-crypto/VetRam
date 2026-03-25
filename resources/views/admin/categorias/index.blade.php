@@ -2,45 +2,146 @@
 
 @section('contenido')
 
-<h1>Categorías</h1>
+<style>
+body {
+    background: #0b0f2a;
+    font-family: 'Segoe UI', sans-serif;
+    color: #fff;
+}
 
-<a href="/admin/categorias/create">Nueva Categoría</a>
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
 
-<table border="1">
+/* LOGO */
+.titulo {
+    border: 2px solid #facc15;
+    padding: 10px 40px;
+    font-size: 28px;
+    font-weight: bold;
+}
 
-<tr>
-<th>ID</th>
-<th>Nombre</th>
-<th>Acciones</th>
-</tr>
+/* BOTONES */
+.btn {
+    padding: 10px 20px;
+    border: 2px solid #facc15;
+    color: #facc15;
+    text-decoration: none;
+}
+
+.btn-yellow {
+    background: #facc15;
+    color: #000;
+    border: none;
+}
+
+.btn-yellow:hover {
+    background: #eab308;
+}
+
+/* GRID */
+.categorias-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* CARD */
+.categoria-card {
+    background: #dcdcdc;
+    color: #000;
+    border: 2px solid #000;
+    padding: 20px;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.categoria-card:hover {
+    transform: scale(1.05);
+}
+
+/* TITULO CARD */
+.categoria-card h3 {
+    margin-bottom: 10px;
+}
+
+/* INFO */
+.categoria-card p {
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+/* BOTONES INTERNOS */
+.card-buttons {
+    margin-top: 10px;
+}
+
+.card-buttons a,
+.card-buttons button {
+    font-size: 12px;
+    padding: 5px 10px;
+    margin: 3px;
+    border: 1px solid #000;
+    background: #fff;
+    cursor: pointer;
+}
+
+.card-buttons a {
+    text-decoration: none;
+    color: #000;
+}
+
+.card-buttons button {
+    color: red;
+}
+</style>
+
+<div class="header">
+    <div class="titulo">VENTRAM</div>
+
+    <a href="/admin/categorias/create" class="btn btn-yellow">
+        CREAR CATEGORÍA
+    </a>
+</div>
+
+<h2>LISTA DE CATEGORÍAS</h2>
+
+<div class="categorias-container">
 
 @foreach($categorias as $categoria)
 
-<tr>
+    <div class="categoria-card">
 
-<td>{{ $categoria->id }}</td>
+        <h3>CAT</h3>
 
-<td>{{ $categoria->nombre }}</td>
+        <p><strong>{{ $categoria->nombre }}</strong></p>
 
-<td>
+        {{-- Puedes cambiar esto si luego tienes relación productos --}}
+        <p>Estado: Activa</p>
 
-<a href="/admin/categorias/{{ $categoria->id }}/edit">Editar</a>
+        <div class="card-buttons">
 
-<form action="/admin/categorias/{{ $categoria->id }}" method="POST" style="display:inline">
+            <a href="/admin/categorias/{{ $categoria->id }}/edit">
+                EDITAR
+            </a>
 
-@csrf
-@method('DELETE')
+            <form action="/admin/categorias/{{ $categoria->id }}" method="POST" style="display:inline">
+                @csrf
+                @method('DELETE')
+                <button type="submit">ELIMINAR</button>
+            </form>
 
-<button type="submit">Eliminar</button>
+        </div>
 
-</form>
-
-</td>
-
-</tr>
+    </div>
 
 @endforeach
 
-</table>
+</div>
 
 @endsection

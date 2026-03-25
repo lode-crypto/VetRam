@@ -18,7 +18,9 @@ class ProductoController extends Controller
 
     public function tienda()
     {
-        $productos = \App\Models\Producto::all();
+        $productos = Producto::with('categoria')->get()->groupBy(function($item) {
+            return $item->categoria->nombre ?? 'Sin categoría';
+        });
         return view('tienda.productos', compact('productos'));
     }
 
@@ -30,7 +32,9 @@ class ProductoController extends Controller
 
     public function index()
     {
-        $productos = Producto::with('categoria')->get();
+        $productos = Producto::with('categoria')->get()->groupBy(function($item) {
+            return $item->categoria->nombre ?? 'Sin categoría';
+        });
         return view('admin.productos.index', compact('productos'));
     }
 

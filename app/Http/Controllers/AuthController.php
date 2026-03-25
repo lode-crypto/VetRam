@@ -72,6 +72,9 @@ class AuthController extends Controller
             'administrador_id' => $admin->id,
         ]);
 
+        // Crear carrito automáticamente
+        $cliente->crearCarrito();
+
         session(['user_id' => $cliente->id, 'user_role' => 'user', 'user_name' => $cliente->nombre]);
 
         return redirect('/');

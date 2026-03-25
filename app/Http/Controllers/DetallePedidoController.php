@@ -11,7 +11,9 @@ class DetallePedidoController extends Controller
 {
     public function index()
     {
-        $detalles = DetallePedido::with(['pedido','producto'])->get();
+        $detalles = DetallePedido::with(['pedido', 'producto'])
+                                ->orderBy('created_at', 'desc')
+                                ->get();
 
         $total = 0;
 

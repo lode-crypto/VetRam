@@ -17,15 +17,10 @@ return new class extends Migration
             $table->text('descripcion');
             $table->decimal('precio', 10, 2);
             $table->integer('stock');
-            $table->string('imagen') ->nullable();
+            $table->string('imagen')->nullable();
 
             $table->foreignId('categoria_id')
                   ->constrained('categorias')
-                  ->onDelete('cascade');
-
-            $table->foreignId('carrito_id')
-                  ->nullable()
-                  ->constrained('carritos')
                   ->onDelete('cascade');
 
             $table->timestamps();
